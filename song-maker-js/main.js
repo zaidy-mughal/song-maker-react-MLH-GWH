@@ -1,12 +1,20 @@
-console.log("Start loading JS");
-
 const grid = document.getElementById("grid");
 
-const myTempH1 = document.createElement("h1");
-grid.appendChild(myTempH1);
+const layout = document.createElement("div");
+layout.className = "grid-layout";
 
-console.log("created myTempH1");
+const labelsCol = document.createElement("div");
+labelsCol.className = "labels-left-side";
 
-myTempH1.textContent = "Bye bye!";
+const spacer = document.createElement("div");
+spacer.className = "ruler-spacer";
 
-console.log("Finish loading JS");
+labelsCol.appendChild(spacer);
+
+const labels = document.createElement("div");
+labels.className = "row-label";
+
+labelsCol.appendChild(labels);
+
+layout.appendChild(labelsCol);
+grid.appendChild(layout);
