@@ -6,6 +6,42 @@
     <title>Song Maker (JS)</title>
   </head>
   <body>
-    <h1>Hello GHW!</h1>
+    <main>
+      <!-- Header -->
+      <header>
+        <h1>Song Maker (JS)</h1>
+      </header>
+      <!-- Section 1 -->
+      <section>
+        <button>Play</button>
+        <label for="tempo">Tempo</label>
+        <input
+          id="tempo"
+          name="tempo"
+          aria-label="Tempo (bpm)"
+          type="number"
+          min="40"
+          max="240"
+          value="120"
+        />
+
+        <span>|</span>
+
+        <label for="waveSelect">Sound</label>
+        <select name="waveSelect" id="waveSelect">
+          <option value="sine">Sine</option>
+          <option value="square">Square</option>
+          <option value="traingle">Triangle</option>
+          <option value="sawtooth">Saw</option>
+        </select>
+
+        <span>|</span>
+
+        <button id="clearBtn">Clear</button>
+        <button id="randomBtn">Randomise</button>
+      </section>
+      <!-- Section 2 -->
+      <section id="grid" role="grid" aria-label="Notes grid"></section>
+    </main>
   </body>
 </html>
