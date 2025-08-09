@@ -1,0 +1,79 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --line: #243244;
+  --cell: #0e1a2b;
+  --cell-active: #18334f;
+  --text: #e5e7eb;
+  --muted: #9aa7b8;
+  --accent: #22d3ee;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* Header */
+.app-header {
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 20px;
+}
+
+/* Controls */
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+}
+
+.btn,
+.wave-select,
+.tempo-input {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: var(--panel);
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #354b7a;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.divider {
+  opacity: 0.6;
+  color: var(--muted);
+}
