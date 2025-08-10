@@ -1,11 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Song Maker (JS)</title>
-</head>
-<body>
-    <h1>Hello GWH</h1>
-</body>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <!-- Header -->
+      <header class="app-header">
+        <h1 class="title">Song Maker (JS)</h1>
+      </header>
+      <!-- Section 1 -->
+      <section id="controls" aria-label="Controls">
+        <button id="play" class="btn">Play</button>
+        <label for="tempo">Tempo</label>
+        <input
+          id="tempo"
+          class="tempo-input"
+          name="tempo"
+          aria-label="Tempo (bpm)"
+          type="number"
+          min="40"
+          max="240"
+          value="120"
+        />
+
+        <span class="divider">|</span>
+
+        <label for="waveSelect">Sound</label>
+        <select name="waveSelect" id="waveSelect" class="wave-select">
+          <option value="sine">Sine</option>
+          <option value="square">Square</option>
+          <option value="traingle">Triangle</option>
+          <option value="sawtooth">Saw</option>
+        </select>
+
+        <span class="divider">|</span>
+
+        <button id="clearBtn" class="btn">Clear</button>
+        <button id="randomBtn" class="btn">Randomise</button>
+      </section>
+      <!-- Section 2 -->
+      <section id="grid" class="grid" role="grid" aria-label="Notes grid"></section>
+    </main>
+
+    <noscript
+      >Please enable Javascript to use this Song Maker project.</noscript
+    >
+    <script src="./main.js"></script>
+  </body>
 </html>

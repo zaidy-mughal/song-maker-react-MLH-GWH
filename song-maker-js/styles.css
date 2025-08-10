@@ -1,0 +1,174 @@
+:root {
+  --bg: #0f172a;
+  --panel: #111827;
+  --line: #243244;
+  --cell: #0e1a2b;
+  --cell-active: #08d1b0;
+  --text: #e5e7eb;
+  --muted: #9aa7b8;
+  --accent: #006f54;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* Header */
+.app-header {
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 20px;
+}
+
+/* Controls */
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+}
+
+.btn,
+.wave-select,
+.tempo-input {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: var(--panel);
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #354b7a;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.divider {
+  opacity: 0.6;
+  color: var(--muted);
+}
+
+/* Grid Container */
+.grid {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #0b1422;
+  min-width: fit-content;
+  max-width: fit-content;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 6px;
+}
+
+/* Grid Left Side */
+.labels-left-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.ruler-spacer {
+  height: 22px;
+  margin: 0;
+}
+
+.row-labels {
+  display: grid;
+  /* number of rows is dynamic in JS */
+  /* grid-template-rows: repeat(8, 32px); */
+  gap: 4px;
+}
+
+.row-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 12px;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+}
+
+/* Grid Right Side */
+/* Top Ruler Numbers / Beat Numbers */
+.ruler {
+  display: grid;
+  /* number of columns is dynamic in JS */
+  /* grid-template-columns: repeat(16, 1fr); */
+  gap: 4px;
+  margin: 0;
+}
+
+.ruler-cell {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+}
+
+.ruler-cell.beat {
+  background-color: #0552b7;
+}
+
+/* Bottom Grid Inner */
+.grid-inner {
+  display: grid;
+  /* TODO: make the number of columns dynamic */
+  grid-template-columns: repeat(16, 1fr);
+  grid-auto-rows: 32px;
+  gap: 4px;
+}
+
+.cell {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background-color: var(--cell);
+  cursor: pointer;
+  /* TEMPORARY */
+  color: var(--text);
+}
+
+.cell:hover {
+  background-color: #1c3455;
+}
+
+.cell.active {
+  background-color: var(--cell-active);
+  border-color: var(--accent);
+}
