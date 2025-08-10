@@ -1,20 +1,21 @@
 const grid = document.getElementById("grid");
 
-const layout = document.createElement("div");
-layout.className = "grid-layout";
+const gridLayout = document.createElement("div");
+gridLayout.className = "grid-layout";
+gridLayout.id = "grid-layout";
 
-const labelsCol = document.createElement("div");
-labelsCol.className = "labels-left-side";
+const labelsLeftSide = document.createElement("div");
+labelsLeftSide.className = "labels-left-side";
 
-const spacer = document.createElement("div");
-spacer.className = "ruler-spacer";
+const rulerSpacer = document.createElement("div");
+rulerSpacer.className = "ruler-spacer";
 
-labelsCol.appendChild(spacer);
+const rowLabel = document.createElement("div");
+rowLabel.className = "row-label";
 
-const labels = document.createElement("div");
-labels.className = "row-label";
+labelsLeftSide.appendChild(rulerSpacer);
+labelsLeftSide.appendChild(rowLabel);
 
-labelsCol.appendChild(labels);
+gridLayout.appendChild(labelsLeftSide);
 
-layout.appendChild(labelsCol);
-grid.appendChild(layout);
+grid.appendChild(gridLayout);
