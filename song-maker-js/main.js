@@ -1,11 +1,21 @@
+const ROWS = 8; // total number of horizontal pitches (notes)
+const COLS = 16; // total number of vertical time steps (beats)
+
 /**
- * JSDoc.
- * Create a HTML element with provided class and id
- * @param {string} tag HTML tag
- * @param {string} cssClass class for the HTML tag
- * @param {string} idAttr id for the HTML tag
- * @returns {HTMLElement}
- * @example const myElement = el("span", "dummy-class", "dummy-id");
+ * Names for each row / note names.
+ * Numbers 3 and 2 refer to octaves. It is arranged in the order of highest note first.
+ * More info: {@link https://www.musicandtheory.com/an-easy-guide-to-scientific-pitch-notation/}
+ */
+const NOTE_NAMES = ["C3", "B2", "A2", "G2", "F2", "E2", "D2", "C2"]; // TODO: ADD MORE NOTES AND OCTAVES, MAKE IT DYNAMIC DEPENDING ON ROWS
+
+/**
+ * Create an HTML element with provided class and id
+ * @param {string} tag - HTML tag name (e.g., 'div', 'span', 'button').
+ * @param {string} cssClass - Class name(s) for the element.
+ * @param {string} idAttr - ID for the element.
+ * @returns {HTMLElement} The created HTML element.
+ * @example
+ * const myElement = el("span", "dummy-class", "dummy-id");
  * // It will create
  * <span class='dummy-class' id='dummy-id'></span>
  */
@@ -17,82 +27,117 @@ function el(tag, cssClass, idAttr) {
   if (idAttr) {
     htmlElement.id = idAttr;
   }
-
   return htmlElement;
 }
 
-const ROWS = 8; // total number of horizontal pitches
-const COLS = 16; // total number of vertical time steps
 /**
- * Names for each row / note names.
- * Numbers 3 and 2 refer to octaves. It is arranged in the order of highest note first.
- * More info: {@link https://www.musicandtheory.com/an-easy-guide-to-scientific-pitch-notation/}
+ * Render the interactive grid for the song maker.
+ * @param {HTMLElement} container - The DOM element to render the grid into.
  */
-const NOTE_NAMES = ["C3", "B2", "A2", "G2", "F2", "E2", "D2", "C2"];
+function renderGrid(container) {
+  // Outer grid layout container
+  const gridLayout = el("div", "grid-layout", "grid-layout-1");
 
-const grid = document.getElementById("grid");
+  // Left column: note labels
+  const labelsLeftSide = el("div", "labels-left-side", "labels-left-side-1");
+  const rulerSpacer = el("div", "ruler-spacer"); // Spacer for alignment
+  labelsLeftSide.appendChild(rulerSpacer);
 
-const gridLayout = el("div", "grid-layout", "grid-layout-1"); // outer grid layout container
+  // Container for note labels
+  const rowLabels = el("div", "row-labels");
+  rowLabels.style.gridTemplateRows = `repeat(${ROWS}, 32px)`; // Set rows dynamically
 
-// Left column: notes labels
-const labelsLeftSide = el("div", "labels-left-side", "labels-left-side-1");
-const rulerSpacer = el("div", "ruler-spacer");
-labelsLeftSide.appendChild(rulerSpacer);
+  // Add note labels to the left side
+  NOTE_NAMES.forEach((noteName) => {
+    const rowLabel = el("div", "row-label");
+    rowLabel.textContent = noteName; // Set the text content to the note name
+    rowLabels.appendChild(rowLabel); // Append the label to the row labels container
+  });
+  labelsLeftSide.appendChild(rowLabels); // Add the row labels to the left side
+  gridLayout.appendChild(labelsLeftSide); // Add the left side to the grid layout
 
-const rowLabels = el("div", "row-labels"); // container for note labels
-rowLabels.style.gridTemplateRows = `repeat(${ROWS}, 32px`; // dynamic ROWS
+  // Right column: ruler + clickable cells
+  const gridRightSide = el("div", "grid-right-side"); // Right side of the grid
 
-NOTE_NAMES.forEach((noteName) => {
-  const rowLabel = el("div", "row-label");
-  rowLabel.textContent = noteName; // set the label text
-  rowLabels.appendChild(rowLabel);
-});
-labelsLeftSide.appendChild(rowLabels); // add labels to left column
-gridLayout.appendChild(labelsLeftSide); // add left column to the layout
+  // Ruler on top to show beat numbers
+  const ruler = el("div", "ruler"); // Ruler element
+  ruler.style.gridTemplateColumns = `repeat(${COLS}, 32px)`; // Set columns dynamically
 
-// Right column: ruler + clickable cells
-const gridRightSide = el("div", "grid-right-side"); // container for ruler and grid
-const ruler = el("div", "ruler"); // ruler on top to show beat numbers
-ruler.style.gridTemplateColumns = `repeat(${COLS}, 32px)`; // dynamic COLS
-
-for (let colIdx = 1; colIdx <= COLS; colIdx++) {
-  const isBeat = colIdx % 4 === 0; // divide each colIdx by 4 and check if remainer is 0
-  const rulerCell = el("div", `ruler-cell${isBeat ? " beat" : ""}`); // add 'beat' class every 4 columns
-  rulerCell.textContent = colIdx;
-  ruler.appendChild(rulerCell); // add to ruler
-}
-gridRightSide.appendChild(ruler); // add ruler to right column
-
-const gridInner = el("div", "grid-inner");
-gridInner.style.gridTemplateColumns = `repeat(${COLS}, 32px)`; // dynamic COLS
-
-const gridState = Array.from({ length: ROWS }, () => Array(COLS).fill(false)); // 2D array for storing active notes. 'false' means it is inactive
-
-// Understanding:
-// 8 arrays of false, and each array will have 16 false
-// [ [false, false, false...], [false, false, false...], [false, false, false...], ...]
-
-function updateCellElement(cell, row, col) {
-  const isActive = gridState[row][col];
-  cell.classList.toggle("active", isActive); // add or remove the '.active' class
-}
-
-function toggleCellState(rowNumber, colNumber, cellElement) {
-  gridState[rowNumber][colNumber] = !gridState[rowNumber][colNumber]; // flip the boolean
-  updateCellElement(cellElement, rowNumber, colNumber); // update the cell appearance
-}
-
-for (let eachRow = 0; eachRow < ROWS; eachRow++) {
-  for (let eachCol = 0; eachCol < COLS; eachCol++) {
-    const cell = el("button", "cell");
-    gridInner.appendChild(cell); // add cell to grid inner
-
-    cell.addEventListener("click", () =>
-      toggleCellState(eachRow, eachCol, cell)
-    );
+  // Add beat numbers to the ruler
+  for (let colIdx = 1; colIdx <= COLS; colIdx++) {
+    const isBeat = colIdx % 4 === 0; // Highlight every 4th beat. This is done by checking if the column index is divisible by 4.
+    const rulerCell = el("div", `ruler-cell${isBeat ? " beat" : ""}`); // Create a ruler cell with a class for beats
+    rulerCell.textContent = colIdx;
+    ruler.appendChild(rulerCell); // Append the ruler cell to the ruler
   }
+  gridRightSide.appendChild(ruler); // Add the ruler to the right side of the grid
+
+  const gridInner = el("div", "grid-inner"); // Inner grid container
+  gridInner.style.gridTemplateColumns = `repeat(${COLS}, 32px)`; // Set columns dynamically
+
+  /**
+   * 2D array for storing active notes. 'false' means inactive.
+   * Each cell corresponds to a note at a specific time step.
+   * The gridState is initialized with 'false' for all cells.
+   * @example
+   * const gridState = [
+   *   [false, false, false, ...], // Row 0 (C3) with 16 columns (see ROWS and COLS constants)
+   *   [false, false, false, ...], // Row 1 (B2) with 16 columns
+   * ... // and so on for each row and column
+   * ];
+   */
+  const gridState = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+
+  /**
+   * Update the visual state of a cell based on its active/inactive state.
+   * @param {HTMLElement} cell - The cell element to update.
+   * @param {number} row - Row index.
+   * @param {number} col - Column index.
+   */
+  function updateCellElement(cell, row, col) {
+    const isActive = gridState[row][col];
+    cell.classList.toggle("active", isActive); // Toggle the 'active' class based on the cell's state
+  }
+
+  /**
+   * Toggle the state of a cell and update its appearance.
+   * @param {number} rowNumber - Row index.
+   * @param {number} colNumber - Column index.
+   * @param {HTMLElement} cellElement - The cell element to update.
+   */
+  function toggleCellState(rowNumber, colNumber, cellElement) {
+    gridState[rowNumber][colNumber] = !gridState[rowNumber][colNumber]; // Toggle the state of the cell - true to active, false to inactive
+    updateCellElement(cellElement, rowNumber, colNumber); // Update the cell's appearance based on its new state by adding or removing the 'active' class
+  }
+
+  // Create grid cells and add click event listeners
+  for (let eachRow = 0; eachRow < ROWS; eachRow++) {
+    for (let eachCol = 0; eachCol < COLS; eachCol++) {
+      const cell = el("button", "cell");
+      gridInner.appendChild(cell); // Append the cell to the inner grid
+
+      /**
+       * Add click event listener to each cell.
+       * When clicked, it toggles the cell's state (false/true).
+       * Event Listeners: {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener}
+       */
+      cell.addEventListener("click", () =>
+        toggleCellState(eachRow, eachCol, cell)
+      );
+    }
+  }
+
+  gridRightSide.appendChild(gridInner); // Add the inner grid to the right side of the grid
+  gridLayout.appendChild(gridRightSide); // Add the right side to the grid layout
+  container.appendChild(gridLayout); // Finally, append the entire grid layout to the container
 }
 
-gridRightSide.appendChild(gridInner);
-gridLayout.appendChild(gridRightSide); // add grid right column to the layout
-grid.appendChild(gridLayout);
+/**
+ * Main entry point: renders the grid into the #grid element.
+ */
+function main() {
+  const grid = document.getElementById("grid");
+  renderGrid(grid);
+}
+
+main(); // Call the main function to run, when the script is loaded
