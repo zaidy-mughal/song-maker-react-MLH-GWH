@@ -77,3 +77,43 @@ body {
   opacity: 0.6;
   color: var(--muted);
 }
+
+/* Grid Container */
+.grid {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #0b1422;
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 6px;
+}
+
+.labels-left-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.ruler-spacer {
+  height: 22px;
+  margin: 0;
+}
+
+.row-labels {
+  display: grid;
+  grid-template-rows: repeat(8, 32px);
+  gap: 4px;
+}
+
+.row-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  font-size: 12px;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+}
